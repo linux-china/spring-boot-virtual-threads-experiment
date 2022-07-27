@@ -18,19 +18,21 @@ You need Java 19 (EAP) with `--enable-preview` to run the example.
 Customization of a vanilla Spring Boot with Tomcat application:
                                                               
 ```java
-@Bean
-AsyncTaskExecutor applicationTaskExecutor() {
-    // enable async servlet support
-    ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
-    return new TaskExecutorAdapter(executorService::execute);
-}
+@Configuration
+public class LoomVirtualThreadConfiguration {
+    @Bean
+    AsyncTaskExecutor applicationTaskExecutor() {
+        // enable async servlet support
+        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+        return new TaskExecutorAdapter(executorService::execute);
+    }
 
-@Bean
-TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
-
-    return protocolHandler -> {
-        protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-    };
+    @Bean
+    TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
+        return protocolHandler -> {
+            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+        };
+    }
 }
 ```
 
