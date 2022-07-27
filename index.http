@@ -1,0 +1,5 @@
+### OK
+GET http://localhost:8080/
+
+### Database request
+GET http://localhost:8080/sql
